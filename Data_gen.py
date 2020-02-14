@@ -10,22 +10,7 @@ import signal
 import time
 import os
 from multiprocessing import Process, Manager
-#
-#def set_timeout(num):
-#    def wrap(func):
-#      def handle(signum, frame): # 收到信号 SIGALRM 后的回调函数，第一个参数是信号的数字，第二个参数是the interrupted stack frame.
-#        raise RuntimeError
-#      def to_do(*args, **kwargs):
-#        try:
-#          signal.signal(signal.SIGALRM, handle) # 设置信号和回调函数
-#          signal.alarm(num) # 设置 num 秒的闹钟
-#          r = integexp()
-#          signal.alarm(0) # 关闭闹钟
-#          return r
-#        except RuntimeError as e:
-#            pass
-#      return to_do
-#    return wrap
+
 
 def isOper(ch):
     if ch in ['+', '-', '*', '/', '**', '(', ')','tan', 'cos', 'sin', 'exp', 'log', 'sqrt', 'asin', 'acos', 'atan', 'sinh', 'cosh', 'tanh', 'asinh', 'acosh', 'atanh']:
@@ -43,15 +28,12 @@ def infix_to_prefix(infix_expr):
     prefix_expr = []
     s = Stack()
     infix_list = []
-    # 从右到左扫描
     if infix_expr == ['('] or infix_expr[-1] == '#':
         print('can\'t integrate')
         return 0
     for item in reversed(infix_expr):
-        # 如果标记是操作数，将其附加到输出列表的末尾
         if item not in prec.keys():
             prefix_expr.append(item)
-        # 如果标记是右括号，将其压到 s 上
         elif item == ')':
             s.push(item)
         elif item == '(':
@@ -66,7 +48,6 @@ def infix_to_prefix(infix_expr):
             s.push(item)
     while not s.isEmpty():
         prefix_expr.append(s.pop())
-    # 反转序列
     prefix_expr.reverse()
     return ' '.join(prefix_expr)
 #
@@ -85,7 +66,6 @@ def InorderTree(tree, res):
     if not tree:
         return
     if tree.leftChild:
-        # 如果左子树是符号，且优先级低于父节点的优先级则需要加括号
         if isOper(tree.leftChild.key) and getOperOrder(tree.leftChild.key) < getOperOrder(tree.key):
             res.append('(')
             InorderTree(tree.leftChild, res)
@@ -94,7 +74,6 @@ def InorderTree(tree, res):
             InorderTree(tree.leftChild, res)
     res.append(tree.key)
     if tree.rightChild:
-        # 如果有子树是符号且优先级低于父节点的优先级，则需要加括号
         if isOper(tree.rightChild.key) and getOperOrder(tree.rightChild.key) <= getOperOrder(tree.key):
             res.append('(')
             InorderTree(tree.rightChild, res)
