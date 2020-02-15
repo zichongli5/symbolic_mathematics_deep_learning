@@ -249,6 +249,7 @@ def main():
 
     parser.add_argument('-no_cuda', action='store_true')
     parser.add_argument('-label_smoothing', action='store_true')
+    parser.add_argument('-lr', type = float, default = 1e-04)
 
     opt = parser.parse_args()
     opt.cuda = not opt.no_cuda
@@ -291,7 +292,7 @@ def main():
         dropout=opt.dropout).to(device)
 
     optimizer = ScheduledOptim(
-        optim.Adam(transformer.parameters(), betas=(0.9, 0.98), eps=1e-09),
+        optim.Adam(transformer.parameters(), betas=(0.9, 0.98), eps=opt.lr),
         2.0, opt.d_model, opt.n_warmup_steps)
 
     train(transformer, training_data, validation_data, optimizer, device, opt)
