@@ -101,8 +101,8 @@ def train_epoch(model, training_data, optimizer, opt, device, smoothing):
         src_seq, trg_seq = map(lambda x: x.to(opt.device), batch)
         trg_seq, gold = patch_trg(trg_seq)
         src_seq, trg_seq, gold = src_seq.long(), trg_seq.long(), gold.long()
-        print('s',src_seq)
-        print('t',trg_seq)
+#        print('s',src_seq)
+#        print('t',trg_seq)
         # forward
         optimizer.zero_grad()
         pred = model(src_seq, trg_seq)
