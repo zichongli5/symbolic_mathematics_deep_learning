@@ -22,7 +22,7 @@ class EventData(torch.utils.data.Dataset):
             else:
                 i += 1
         # plus 1 since there could be event type 0, but we use 0 as padding
-        self.length = len(data)
+        self.length = len(self.trg)
 
     def __len__(self):
         return self.length
