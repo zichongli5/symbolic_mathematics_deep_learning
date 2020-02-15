@@ -22,7 +22,7 @@ def get_subsequent_mask(seq):
 
 class PositionalEncoding(nn.Module):
 
-    def __init__(self, d_hid, n_position=3000):
+    def __init__(self, d_hid, n_position=301):
         super(PositionalEncoding, self).__init__()
 
         # Not a parameter
@@ -50,7 +50,7 @@ class Encoder(nn.Module):
 
     def __init__(
             self, n_src_vocab, d_word_vec, n_layers, n_head, d_k, d_v,
-            d_model, d_inner, dropout=0.1, n_position=3000):
+            d_model, d_inner, dropout=0.1, n_position=301):
 
         super().__init__()
 #        print(n_src_vocab,'n_src_vocab')
@@ -85,7 +85,7 @@ class Decoder(nn.Module):
 
     def __init__(
             self, n_trg_vocab, d_word_vec, n_layers, n_head, d_k, d_v,
-            d_model, d_inner, n_position=3000, dropout=0.1):
+            d_model, d_inner, n_position=301, dropout=0.1):
 
         super().__init__()
 
@@ -123,7 +123,7 @@ class Transformer(nn.Module):
     def __init__(
             self, n_src_vocab, n_trg_vocab,
             d_word_vec=512, d_model=512, d_inner=2048,
-            n_layers=6, n_head=8, d_k=64, d_v=64, dropout=0.1, n_position=3000,
+            n_layers=6, n_head=8, d_k=64, d_v=64, dropout=0.1, n_position=301,
             trg_emb_prj_weight_sharing=True, emb_src_trg_weight_sharing=True):
 
         super().__init__()
