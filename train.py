@@ -111,6 +111,7 @@ def train_epoch(model, training_data, optimizer, opt, device, smoothing):
         loss, n_correct, n_word = cal_performance(
             pred, gold, opt.trg_pad_idx, smoothing=smoothing) 
         loss.backward()
+#        print(optimizer)
         optimizer.step_and_update_lr()
 
         # note keeping
