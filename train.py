@@ -25,7 +25,7 @@ def prepare_dataloader(opt):
 
     def load_data(name, dict_name):
         data = np.load(name+dict_name+'.npy',allow_pickle=True)
-        max_len =  max([len(elem[0]) for elem in data])
+        max_len =  max([len(elem[1]) for elem in data])
         return data, max_len
 
     print('[Info] Loading train data...')
