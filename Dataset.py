@@ -14,10 +14,13 @@ class EventData(torch.utils.data.Dataset):
         self.dict = opt.vocab_dict
         self.src = [[self.dict[str] for str in inst[0]] for inst in data]
         self.trg = [[self.dict[str] for str in inst[1]] for inst in data]
-        for i in range(len(data)):
+        i = 0
+        while i < len(self.trg):
             if len(self.trg[i])>300:
                 self.trg.pop(i)
                 self.src.pop(i)
+            else:
+                i += 1
         # plus 1 since there could be event type 0, but we use 0 as padding
         self.length = len(data)
 
