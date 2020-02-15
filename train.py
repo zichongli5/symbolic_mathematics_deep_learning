@@ -270,6 +270,7 @@ def main():
     #========= Loading Dataset =========#
 
     training_data, validation_data, max_len = prepare_dataloader(opt)
+    print(max_len)
     opt.trg_pad_idx = 0
     opt.src_pad_idx = 0
 

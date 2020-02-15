@@ -22,7 +22,7 @@ def get_subsequent_mask(seq):
 
 class PositionalEncoding(nn.Module):
 
-    def __init__(self, d_hid, n_position=200):
+    def __init__(self, d_hid, n_position=300):
         super(PositionalEncoding, self).__init__()
 
         # Not a parameter
