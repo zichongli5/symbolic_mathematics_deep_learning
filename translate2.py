@@ -66,7 +66,7 @@ def main():
 
     opt = parser.parse_args()
     opt.cuda = not opt.no_cuda
-
+    print(opt.seq)
 #    data = pickle.load(open(opt.data_pkl, 'rb'))
 #    SRC, TRG = data['vocab']['src'], data['vocab']['trg']
 #    opt.src_pad_idx = SRC.vocab.stoi[Constants.PAD_WORD]
@@ -74,7 +74,7 @@ def main():
 #    opt.trg_bos_idx = TRG.vocab.stoi[Constants.BOS_WORD]
 #    opt.trg_eos_idx = TRG.vocab.stoi[Constants.EOS_WORD]
 
-    opt.vocab_dict = {'0':42, '1':1,'2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'-1':10,'-2':11,'-3':12,'-4':13,'-5':14,'-6':15,'-7':16,'-8':17,'-9':18,')': 19, 'tan': 20, 'cos': 21, 'sin': 22, '**': 23, '*': 24, '/': 25, '+': 26, '-': 27, '(': 28, 'exp':29, 'log':30, 'sqrt':31, 'asin':32, 'acos':33, 'atan':34, 'sinh':35, 'cosh':36, 'tanh':37, 'asinh':38, 'acosh':39, 'atanh':40, 'x': 41, 'e': 43, ' ':0, 'pi':44}
+    opt.vocab_dict = {'0':42, '1':1,'2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'-1':10,'-2':11,'-3':12,'-4':13,'-5':14,'-6':15,'-7':16,'-8':17,'-9':18,')': 19, 'tan': 20, 'cos': 21, 'sin': 22, '**': 23, '*': 24, '/': 25, '+': 26, '-': 27, '(': 28, 'exp':29, 'log':30, 'sqrt':31, 'asin':32, 'acos':33, 'atan':34, 'sinh':35, 'cosh':36, 'tanh':37, 'asinh':38, 'acosh':39, 'atanh':40, 'x': 41, 'e': 43, ' ':0, 'pi':44,'s':45, '\s':46}
 #    test_loader = Dataset(examples=data['test'], fields={'src': SRC, 'trg': TRG})
     
     device = torch.device('cuda' if opt.cuda else 'cpu')
@@ -84,8 +84,8 @@ def main():
         max_seq_len=opt.max_seq_len,
         src_pad_idx=0,
         trg_pad_idx=0,
-        trg_bos_idx=1,
-        trg_eos_idx=1).to(device)
+        trg_bos_idx=45,
+        trg_eos_idx=46).to(device)
 
 #    unk_idx = SRC.vocab.stoi[SRC.unk_token]
 #    with open(opt.output, 'w') as f:

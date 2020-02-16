@@ -12,8 +12,8 @@ class EventData(torch.utils.data.Dataset):
         each dictionary contains: time_since_start, time_since_last_event, type_event
         """
         self.dict = opt.vocab_dict
-        self.src = [[self.dict[str] for str in inst[0]] for inst in data]
-        self.trg = [[self.dict[str] for str in inst[1]] for inst in data]
+        self.src = [[45]+[self.dict[str] for str in inst[0]]+[46] for inst in data]
+        self.trg = [[45]+[self.dict[str] for str in inst[1]]+[46] for inst in data]
         i = 0
         while i < len(self.trg):
             if len(self.trg[i])>300:
