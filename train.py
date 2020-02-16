@@ -112,7 +112,8 @@ def train_epoch(model, training_data, optimizer, opt, device, smoothing):
             pred, gold, opt.trg_pad_idx, smoothing=smoothing) 
         loss.backward()
 #        print(optimizer)
-        optimizer.step_and_update_lr()
+#        optimizer.step_and_update_lr()
+        optimizer.step()
 
         # note keeping
         n_word_total += n_word
