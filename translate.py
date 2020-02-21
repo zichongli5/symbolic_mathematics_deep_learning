@@ -129,7 +129,8 @@ def main():
 #        f.write(pred_line.strip() + '\n')
         src_seq, trg_seq = map(lambda x: x.to(opt.device), batch)
         print(src_seq)
-        pred_seq = translator.translate_sentence(torch.LongTensor(src_seq.long()))
+        print('???')
+        pred_seq = translator.translate_sentence(src_seq.long())
         print(pred_seq)
         print('prediction done')
         if trg_seq.size(1) == torch.tensor([pred_seq]).size(1):
