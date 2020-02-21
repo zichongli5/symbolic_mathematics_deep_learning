@@ -133,7 +133,7 @@ def main():
 #        print('pred',pred_seq)
         trg_seq = trg_seq.long()
         if trg_seq.size(1) == torch.tensor([pred_seq]).size(1):
-            if trg_seq == torch.tensor([pred_seq]).to(opt.device):
+            if trg_seq.numpy().tolist() == [pred_seq]:
                 correct_n += 1
         total_n += 1
     print(correct_n/total_n)
