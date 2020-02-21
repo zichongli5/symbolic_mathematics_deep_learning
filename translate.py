@@ -128,11 +128,7 @@ def main():
 #            #print(pred_line)
 #        f.write(pred_line.strip() + '\n')
         src_seq, trg_seq = map(lambda x: x.to(opt.device), batch)
-        print(src_seq)
-        print('???')
         pred_seq = translator.translate_sentence(src_seq.long())
-        print(pred_seq)
-        print('prediction done')
         if trg_seq.size(1) == torch.tensor([pred_seq]).size(1):
             if trg_seq.size == torch.tensor([pred_seq]):
                 correct_n += 1
