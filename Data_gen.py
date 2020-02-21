@@ -385,13 +385,24 @@ def integexp(expr, integ):
     integ.append(tgt_seq)
 #    return integ
 
-def Generate_data(num_node):
+def diffexp(expr, diff):
+    diff_exp = sp.diff(expr,x)
+    print('eeeee',diff_exp)
+    diff_str = lambdastr(x,diff_exp)
+    print(diff_str)
+    diff_list = string_to_list(diff_str)
+    print('lalala',diff_str)
+    tgt_seq = infix_to_prefix(diff_list)
+    diff.append(tgt_seq)
+
+
+def Generate_data_bwd(num_node):
 #    integ_list = ['#']
     manager = Manager()
-    integ = manager.list([' '])
-    while integ[-1] in [' ', 0]:
+    diff = manager.list([' '])
+    while diff[-1] in [' ', 0]:
         start = time.time()
-        integ = manager.list([' '])
+        diff = manager.list([' '])
         print('s')
         boo = np.random.choice([0,1])
         if boo == 0:
@@ -409,17 +420,17 @@ def Generate_data(num_node):
         print('src',expr_str)
         expr_list = string_to_list(expr_str)
         src_seq = infix_to_prefix(expr_list)
-        integ_p = Process(target = integexp, args = (expr, integ))
+        diff_p = Process(target = diffexp, args = (expr, diff))
         if src_seq != 0:
             print('start int.....')
-            integ_p.start()
+            diff_p.start()
 #            integ = integexp(expr)
             while True:
-                if integ[-1] == ' ' and (time.time() - start)<5:
+                if diff[-1] == ' ' and (time.time() - start)<5:
                     pass
                 else:
-                    print('dd',integ)
-                    os.kill(integ_p.pid,signal.SIGKILL)
+                    print('dd',diff)
+                    os.kill(diff_p.pid,signal.SIGKILL)
                     break
 #            if integ == None:
 #                continue
@@ -433,7 +444,7 @@ def Generate_data(num_node):
 #    print('tgt',integ[1])
     trg = []
     src = []
-    tgt = integ[1].split()
+    tgt = diff[1].split()
     for str in tgt:
         if str[0] in ['1','2','3','4','5','6','7','8','9','0'] and len(str) > 1:
             for i in range(len(str)):
@@ -456,11 +467,82 @@ def Generate_data(num_node):
             src.append(str)
     return [src, trg]
     
+    
+def Generate_data_fwd(num_node):
+    #    integ_list = ['#']
+        manager = Manager()
+        integ = manager.list([' '])
+        while integ[-1] in [' ', 0]:
+            start = time.time()
+            integ = manager.list([' '])
+            print('s')
+            boo = np.random.choice([0,1])
+            if boo == 0:
+                tree = Generate_funtion(num_node)
+            else:
+                tree = Generate_funtion_binary(num_node)
+            res = []
+            InorderTree(tree, res)
+            exp_list = res
+            exp_str = "".join(exp_list)
+    #        exp_str = '324'
+            print(exp_str)
+            expr = sp.sympify(exp_str)
+            expr_str = lambdastr(x,expr)
+            print('src',expr_str)
+            expr_list = string_to_list(expr_str)
+            src_seq = infix_to_prefix(expr_list)
+            integ_p = Process(target = integexp, args = (expr, integ))
+            if src_seq != 0:
+                print('start int.....')
+                integ_p.start()
+    #            integ = integexp(expr)
+                while True:
+                    if integ[-1] == ' ' and (time.time() - start)<5:
+                        pass
+                    else:
+                        print('dd',integ)
+                        os.kill(integ_p.pid,signal.SIGKILL)
+                        break
+    #            if integ == None:
+    #                continue
+    #            else:
+    #                integ_str = lambdastr(x,integ)
+    #                integ_list = string_to_list(integ_str)
+    #                tgt_seq = infix_to_prefix(integ_list)
+            else:
+                continue
+        print('src',expr)
+    #    print('tgt',integ[1])
+        trg = []
+        src = []
+        tgt = integ[1].split()
+        for str in tgt:
+            if str[0] in ['1','2','3','4','5','6','7','8','9','0'] and len(str) > 1:
+                for i in range(len(str)):
+                    trg.append(str[i])
+            elif str[0:2] in ['-1','-2','-3','-4','-5','-6','-7','-8','-9'] and len(str) > 2:
+                trg.append(str[0:2])
+                for i in range(len(str)-2):
+                    trg.append(str[i+2])
+            else:
+                trg.append(str)
+        for str in src_seq.split():
+            if str[0] in ['1','2','3','4','5','6','7','8','9','0'] and len(str) > 1:
+                for i in range(len(str)):
+                    src.append(str[i])
+            elif str[0:2] in ['-1','-2','-3','-4','-5','-6','-7','-8','-9'] and len(str) > 2:
+                src.append(str[0:2])
+                for i in range(len(str)-2):
+                    src.append(str[i+2])
+            else:
+                src.append(str)
+        return [src, trg]
 def Generate_dataset(num_seq, num_node, save_path):
     dataset = []
     for i in range(num_seq):
         num = np.random.choice(range(num_node))+2
-        data = Generate_data(num)
+        data = Generate_data_bwd(num)
         dataset.append(data)
     print(dataset)
     np.save(save_path + '.npy',np.array(dataset))

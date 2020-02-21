@@ -16,7 +16,7 @@ class EventData(torch.utils.data.Dataset):
         self.trg = [[45]+[self.dict[str] for str in inst[1]]+[46] for inst in data]
         i = 0
         while i < len(self.trg):
-            if len(self.trg[i])>300:
+            if len(self.trg[i])>512:
                 self.trg.pop(i)
                 self.src.pop(i)
             else:
