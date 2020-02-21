@@ -131,6 +131,7 @@ def main():
         print(src_seq)
         pred_seq = translator.translate_sentence(torch.LongTensor(src_seq.long()))
         print(pred_seq)
+        print('prediction done')
         if trg_seq.size(1) == torch.tensor([pred_seq]).size(1):
             if trg_seq.size == torch.tensor([pred_seq]):
                 correct_n += 1

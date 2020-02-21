@@ -90,16 +90,16 @@ class Translator(nn.Module):
 
         src_pad_idx, trg_eos_idx = self.src_pad_idx, self.trg_eos_idx 
         max_seq_len, beam_size, alpha = self.max_seq_len, self.beam_size, self.alpha 
-
+        print('111')
         with torch.no_grad():
             src_mask = get_pad_mask(src_seq, src_pad_idx)
             enc_output, gen_seq, scores = self._get_init_state(src_seq, src_mask)
-
+            print('222')
             ans_idx = 0   # default
             for step in range(2, max_seq_len):    # decode up to max length
                 dec_output = self._model_decode(gen_seq[:, :step], enc_output, src_mask)
                 gen_seq, scores = self._get_the_best_score_and_idx(gen_seq, dec_output, scores, step)
-
+                print('333')
                 # Check if all path finished
                 # -- locate the eos in the generated sequences
                 eos_locs = gen_seq == trg_eos_idx   
@@ -111,4 +111,5 @@ class Translator(nn.Module):
                     _, ans_idx = scores.div(seq_lens.float() ** alpha).max(0)
                     ans_idx = ans_idx.item()
                     break
+                print('444')
         return gen_seq[ans_idx][:seq_lens[ans_idx]].tolist()
