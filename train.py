@@ -293,10 +293,10 @@ def main():
         n_head=opt.n_head,
         dropout=opt.dropout).to(device)
 
-#    optimizer = ScheduledOptim(
-#        optim.Adam(transformer.parameters(), betas=(0.9, 0.98), eps=1e-09),
-#        opt.lr, opt.d_model, opt.n_warmup_steps)
-    optimizer = optim.Adam(transformer.parameters(), betas=(0.9, 0.98), eps=opt.lr)
+    optimizer = ScheduledOptim(
+        optim.Adam(transformer.parameters(), betas=(0.9, 0.98), eps=1e-09),
+        opt.lr, opt.d_model, opt.n_warmup_steps)
+#    optimizer = optim.Adam(transformer.parameters(), betas=(0.9, 0.98), eps=opt.lr)
     train(transformer, training_data, validation_data, optimizer, device, opt)
 
 

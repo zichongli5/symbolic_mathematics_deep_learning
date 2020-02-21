@@ -538,7 +538,7 @@ def Generate_data_fwd(num_node):
             else:
                 src.append(str)
         return [src, trg]
-def Generate_dataset(num_seq, num_node, save_path):
+def Generate_dataset_bwd(num_seq, num_node, save_path):
     dataset = []
     for i in range(num_seq):
         num = np.random.choice(range(num_node))+2
@@ -547,6 +547,14 @@ def Generate_dataset(num_seq, num_node, save_path):
     print(dataset)
     np.save(save_path + '.npy',np.array(dataset))
     
+def Generate_dataset_fwd(num_seq, num_node, save_path):
+    dataset = []
+    for i in range(num_seq):
+        num = np.random.choice(range(num_node))+2
+        data = Generate_data_fwd(num)
+        dataset.append(data)
+    print(dataset)
+    np.save(save_path + '.npy',np.array(dataset))
 
 
 def main():
@@ -557,9 +565,13 @@ def main():
 
     parser.add_argument('-num_node', type=int, default=5)
     parser.add_argument('-num_seq', type=int, default=2)
+    parser.add_argument('-method', type=str, choices = ['bwd','fwd'],default = 'bwd')
     
     opt = parser.parse_args()
-    Generate_dataset(opt.num_seq, opt.num_node, opt.save_path)
+    if opt.method == 'bwd':
+        Generate_dataset_bwd(opt.num_seq, opt.num_node, opt.save_path)
+    elif opt.method == 'fwd':
+        Generate_dataset_fwd(opt.num_seq, opt.num_node, opt.save_path)
     
 if __name__ == '__main__':
     main()
