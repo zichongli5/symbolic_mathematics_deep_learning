@@ -5,6 +5,7 @@ import sympy as sp
 from sympy.abc import x,y
 from sympy.utilities.lambdify import lambdastr
 import argparse
+from tqdm import tqdm
 from sympy import tan, cos, sin, asin, acos, atan, asinh, acosh, atanh, sinh, cosh, tanh
 import signal
 import time
@@ -29,7 +30,7 @@ def infix_to_prefix(infix_expr):
     s = Stack()
     infix_list = []
     if infix_expr == ['('] or infix_expr[-1] == '#':
-        print('can\'t integrate')
+#        print('can\'t integrate')
         return 0
     for item in reversed(infix_expr):
         if item not in prec.keys():
@@ -145,8 +146,8 @@ def string_to_list(str):
                 list.append('sin')
                 i += 3
             else:
-                print('invalid string')
-                print(str[i])
+#                print('invalid string')
+#                print(str[i])
                 break
         elif str[i] == 'c':
             if str[i+3] == 'h':
@@ -167,8 +168,8 @@ def string_to_list(str):
                 list.append('tan')
                 i += 3
             else:
-                print('invalid string')
-                print(str[i])
+#                print('invalid string')
+#                print(str[i])
                 break
         elif str[i] == 'a':
             if str[i:i+5] in ['asinh','acosh','atanh']:
@@ -178,8 +179,8 @@ def string_to_list(str):
                 list.append(str[i:i+4])
                 i += 4
             else:
-                print('invalid string')
-                print(str[i])
+#                print('invalid string')
+#                print(str[i])
                 break
         elif str[i] == 'm':
             i += 5
@@ -197,8 +198,8 @@ def string_to_list(str):
             list.append('pi')
             i += 2
         else:
-            print('invalid string')
-            print(str[i])
+#            print('invalid string')
+#            print(str[i])
             list.append('#')
             break
     return list
@@ -376,22 +377,22 @@ def Generate_funtion(num_node):
 
 def integexp(expr, integ):
     integ_exp = sp.integrate(expr,x)
-    print('eeeee',integ_exp)
+#    print('eeeee',integ_exp)
     integ_str = lambdastr(x,integ_exp)
-    print(integ_str)
+#    print(integ_str)
     integ_list = string_to_list(integ_str)
-    print('lalala',integ_str)
+#    print('lalala',integ_str)
     tgt_seq = infix_to_prefix(integ_list)
     integ.append(tgt_seq)
 #    return integ
 
 def diffexp(expr, diff):
     diff_exp = sp.diff(expr,x)
-    print('eeeee',diff_exp)
+#    print('eeeee',diff_exp)
     diff_str = lambdastr(x,diff_exp)
-    print(diff_str)
+#    print(diff_str)
     diff_list = string_to_list(diff_str)
-    print('lalala',diff_str)
+#    print('lalala',diff_str)
     tgt_seq = infix_to_prefix(diff_list)
     diff.append(tgt_seq)
 
@@ -403,7 +404,7 @@ def Generate_data_bwd(num_node):
     while diff[-1] in [' ', 0]:
         start = time.time()
         diff = manager.list([' '])
-        print('s')
+#        print('s')
         boo = np.random.choice([0,1])
         if boo == 0:
             tree = Generate_funtion(num_node)
@@ -414,22 +415,22 @@ def Generate_data_bwd(num_node):
         exp_list = res
         exp_str = "".join(exp_list)
 #        exp_str = '324'
-        print(exp_str)
+#        print(exp_str)
         expr = sp.sympify(exp_str)
         expr_str = lambdastr(x,expr)
-        print('src',expr_str)
+#        print('src',expr_str)
         expr_list = string_to_list(expr_str)
         src_seq = infix_to_prefix(expr_list)
         diff_p = Process(target = diffexp, args = (expr, diff))
         if src_seq != 0:
-            print('start int.....')
+#            print('start int.....')
             diff_p.start()
 #            integ = integexp(expr)
             while True:
                 if diff[-1] == ' ' and (time.time() - start)<5:
                     pass
                 else:
-                    print('dd',diff)
+#                    print('dd',diff)
                     os.kill(diff_p.pid,signal.SIGKILL)
                     break
 #            if integ == None:
@@ -440,7 +441,7 @@ def Generate_data_bwd(num_node):
 #                tgt_seq = infix_to_prefix(integ_list)
         else:
             continue
-    print('src',expr)
+#    print('src',expr)
 #    print('tgt',integ[1])
     trg = []
     src = []
@@ -465,7 +466,7 @@ def Generate_data_bwd(num_node):
                 src.append(str[i+2])
         else:
             src.append(str)
-    return [src, trg]
+    return [trg, src]
     
     
 def Generate_data_fwd(num_node):
@@ -475,7 +476,7 @@ def Generate_data_fwd(num_node):
         while integ[-1] in [' ', 0]:
             start = time.time()
             integ = manager.list([' '])
-            print('s')
+#            print('s')
             boo = np.random.choice([0,1])
             if boo == 0:
                 tree = Generate_funtion(num_node)
@@ -486,22 +487,22 @@ def Generate_data_fwd(num_node):
             exp_list = res
             exp_str = "".join(exp_list)
     #        exp_str = '324'
-            print(exp_str)
+#            print(exp_str)
             expr = sp.sympify(exp_str)
             expr_str = lambdastr(x,expr)
-            print('src',expr_str)
+#            print('src',expr_str)
             expr_list = string_to_list(expr_str)
             src_seq = infix_to_prefix(expr_list)
             integ_p = Process(target = integexp, args = (expr, integ))
             if src_seq != 0:
-                print('start int.....')
+#                print('start int.....')
                 integ_p.start()
     #            integ = integexp(expr)
                 while True:
                     if integ[-1] == ' ' and (time.time() - start)<5:
                         pass
                     else:
-                        print('dd',integ)
+#                        print('dd',integ)
                         os.kill(integ_p.pid,signal.SIGKILL)
                         break
     #            if integ == None:
@@ -512,7 +513,7 @@ def Generate_data_fwd(num_node):
     #                tgt_seq = infix_to_prefix(integ_list)
             else:
                 continue
-        print('src',expr)
+#        print('src',expr)
     #    print('tgt',integ[1])
         trg = []
         src = []
@@ -540,7 +541,7 @@ def Generate_data_fwd(num_node):
         return [src, trg]
 def Generate_dataset_bwd(num_seq, num_node, save_path):
     dataset = []
-    for i in range(num_seq):
+    for i in tqdm(range(num_seq)):
         num = np.random.choice(range(num_node))+2
         data = Generate_data_bwd(num)
         dataset.append(data)
@@ -549,7 +550,7 @@ def Generate_dataset_bwd(num_seq, num_node, save_path):
     
 def Generate_dataset_fwd(num_seq, num_node, save_path):
     dataset = []
-    for i in range(num_seq):
+    for i in tqdm(range(num_seq)):
         num = np.random.choice(range(num_node))+2
         data = Generate_data_fwd(num)
         dataset.append(data)

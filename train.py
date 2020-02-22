@@ -23,11 +23,10 @@ from transformer.Optim import ScheduledOptim
 def prepare_dataloader(opt):
     """ loading data and preparing dataloader """
 
-    def load_data(name, dict_name):
-        data = np.load(name+dict_name+'.npy',allow_pickle=True)
+    def load_data(name):
+        data = np.load(name+'.npy',allow_pickle=True)
         max_len =  max([len(elem[1]) for elem in data])
         return data, max_len
-
     print('[Info] Loading train data...')
     train_data, max_len_train = load_data(opt.data ,'train')
     print('[Info] Loading dev data...')
