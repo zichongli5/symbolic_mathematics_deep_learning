@@ -136,6 +136,7 @@ def main():
             if trg_seq.size(1) == torch.tensor([pred_seq[i]]).size(1):
                 if trg_seq.cpu().numpy().tolist() == [pred_seq[i]]:
                     correct_n += 1
+                    break
         total_n += 1
     print(correct_n/total_n)
 
