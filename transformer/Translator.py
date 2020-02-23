@@ -108,4 +108,5 @@ class Translator(nn.Module):
                     _, ans_idx = scores.div(seq_lens.float() ** alpha).max(0)
                     ans_idx = ans_idx.item()
                     break
-        return gen_seq[ans_idx][:seq_lens[ans_idx]].tolist()
+        all_ans = [gen_seq[i][:seq_lens[i]].tolist() for i in range(beam_size)
+        return all_ans

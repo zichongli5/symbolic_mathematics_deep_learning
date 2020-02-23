@@ -132,9 +132,10 @@ def main():
 #        print('trg',trg_seq)
 #        print('pred',pred_seq)
         trg_seq = trg_seq.long()
-        if trg_seq.size(1) == torch.tensor([pred_seq]).size(1):
-            if trg_seq.cpu().numpy().tolist() == [pred_seq]:
-                correct_n += 1
+        for i in range(opt.beam_size):
+            if trg_seq.size(1) == torch.tensor([pred_seq[i]]).size(1):
+                if trg_seq.cpu().numpy().tolist() == [pred_seq[i]]:
+                    correct_n += 1
         total_n += 1
     print(correct_n/total_n)
 
