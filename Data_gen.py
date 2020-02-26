@@ -29,7 +29,7 @@ def infix_to_prefix(infix_expr):
     prefix_expr = []
     s = Stack()
     infix_list = []
-    if infix_expr == ['('] or infix_expr[-1] == '#':
+    if infix_expr in [['('],['0']] or infix_expr[-1] == '#':
 #        print('can\'t integrate')
         return 0
     for item in reversed(infix_expr):
@@ -157,8 +157,8 @@ def string_to_list(str):
                 list.append('cos')
                 i += 3
             else:
-                print('invalid string')
-                print(str[i])
+#                print('invalid string')
+#                print(str[i])
                 break
         elif str[i] == 't':
             if str[i+3] == 'h':
@@ -204,7 +204,33 @@ def string_to_list(str):
             break
     return list
                 
-            
+def delconstant(infix_list):
+    if infix_list[-1] in ['#','(']:
+        return ['#']
+    infix = infix_list[1:-1]
+    level = 0
+    have_x = 0
+    delete_index = 0
+    for i in range(1,len(infix)+1):
+        if infix[-i] == ')':
+            level += 1
+        elif infix[-i] == '(':
+            level -= 1
+        elif infix[-i] == 'x':
+            have_x = 1
+            break
+        elif infix[-i] in ['+','-']:
+            if level == 0:
+                delete_index = -i
+        else:
+            pass
+    if have_x == 0:
+        infix = ['0']
+        return infix
+    elif delete_index != 0:
+        return infix[:delete_index]
+    else:
+        return infix
 
 
 def buildTree(prefix):
@@ -420,7 +446,12 @@ def Generate_data_bwd(num_node):
         expr_str = lambdastr(x,expr)
 #        print('src',expr_str)
         expr_list = string_to_list(expr_str)
-        src_seq = infix_to_prefix(expr_list)
+#        print(expr_list)
+        expr_clear = delconstant(expr_list)
+        if expr_clear[-1] != '#':
+            expr = sp.sympify("".join(expr_clear))
+#        print(expr_clear)
+        src_seq = infix_to_prefix(expr_clear)
         diff_p = Process(target = diffexp, args = (expr, diff))
         if src_seq != 0:
 #            print('start int.....')
