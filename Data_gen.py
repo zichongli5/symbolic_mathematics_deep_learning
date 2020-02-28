@@ -332,7 +332,7 @@ def Generate_funtion_binary(num_node):
     leaf_list = leaf_list + pos_list
     for tree in leaf_list:
 #        num = np.random.choice(['x','1','2','3','4','5','-3','-1','-2','-4','-5'])
-        num = np.random.choice(['x','1','2','3','-3','-1','-2'], p = [0.4,0.1,0.1,0.1,0.1,0.1,0.1])
+        num = np.random.choice(['x','1','2','3','-3','-1','-2'], p = [0.6,0.1,0.06,0.06,0.06,0.06,0.06])
         tree.setRootVal(num)
 #    index = np.random.choice(range(len(leaf_list)))
 #    leaf_list[index].setRootVal('x')
@@ -375,8 +375,8 @@ def Generate_funtion(num_node):
                     pos_list.pop(0)
             e = e - pos[0] + 1
         elif pos[1] == 1:
-#            op = np.random.choice(['tan', 'cos', 'sin', 'exp', 'log', 'sqrt', 'asin', 'acos', 'atan', 'sinh', 'cosh', 'tanh', 'asinh', 'acosh', 'atanh'])
-            op = np.random.choice(['tan', 'cos', 'sin', 'exp', 'log', 'sqrt'])
+            op = np.random.choice(['tan', 'cos', 'sin', 'exp', 'log', 'sqrt', 'asin', 'acos', 'atan', 'sinh', 'cosh', 'tanh', 'asinh', 'acosh', 'atanh'])
+#            op = np.random.choice(['tan', 'cos', 'sin', 'exp', 'log', 'sqrt'])
             currentTree.setRootVal(op)
             currentTree.insertRight('')
             pos_list[pos[0]] = currentTree.getRightChild()
@@ -393,7 +393,7 @@ def Generate_funtion(num_node):
     leaf_list = leaf_list + pos_list
     for tree in leaf_list:
         #        num = np.random.choice(['x','1','2','3','4','5','-3','-1','-2','-4','-5'])
-        num = np.random.choice(['x','1','2','3','-3','-1','-2'],p = [0.4,0.1,0.1,0.1,0.1,0.1,0.1])
+        num = np.random.choice(['x','1','2','3','-3','-1','-2'], p = [0.6,0.1,0.06,0.06,0.06,0.06,0.06])
         tree.setRootVal(num)
 #    index = np.random.choice(range(len(leaf_list)))
 #    leaf_list[index].setRootVal('x')
