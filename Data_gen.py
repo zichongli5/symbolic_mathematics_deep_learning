@@ -521,7 +521,7 @@ def Generate_data_fwd(num_node):
 #            print(exp_str)
             expr = sp.sympify(exp_str)
             expr_str = lambdastr(x,expr)
-#            print('src',expr_str)
+            print('src',expr)
             expr_list = string_to_list(expr_str)
             src_seq = infix_to_prefix(expr_list)
             integ_p = Process(target = integexp, args = (expr, integ))
