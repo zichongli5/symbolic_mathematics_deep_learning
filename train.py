@@ -112,8 +112,8 @@ def train_epoch(model, training_data, optimizer, opt, device, smoothing):
             pred, gold, opt.trg_pad_idx, smoothing=smoothing) 
         loss.backward()
 #        print(optimizer)
-        optimizer.step_and_update_lr()
-#        optimizer.step()
+#        optimizer.step_and_update_lr()
+        optimizer.step()
 
         # note keeping
         n_word_total += n_word
@@ -296,8 +296,8 @@ def main():
     optimizer = ScheduledOptim(
         optim.Adam(transformer.parameters(), betas=(0.9, 0.98), eps=1e-09),
         opt.lr, opt.d_model, opt.n_warmup_steps)
-#    optimizer = optim.Adam(transformer.parameters(), betas=(0.9, 0.98), eps=opt.lr)
-    train(transformer, training_data, validation_data, optimizer, device, opt)
+    optimizer = optim.Adam(transformer.parameters(), betas=(0.9, 0.999), eps=opt.lr)
+#    train(transformer, training_data, validation_data, optimizer, device, opt)
 
 
 
