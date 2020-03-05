@@ -293,9 +293,28 @@ def main():
         n_head=opt.n_head,
         dropout=opt.dropout).to(device)
 
+    if opt.pretrain != None:
+        checkpoint = torch.load(opt.pretrain, map_location=device)
+        model_opt = checkpoint['settings']
+        transformer = Transformer(
+        46,
+        46,
+        trg_emb_prj_weight_sharing=model_opt.proj_share_weight,
+        emb_src_trg_weight_sharing=model_opt.embs_share_weight,
+        d_k=model_opt.d_k,
+        d_v=model_opt.d_v,
+        d_model=model_opt.d_model,
+        d_word_vec=model_opt.d_word_vec,
+        d_inner=model_opt.d_inner_hid,
+        n_layers=model_opt.n_layers,
+        n_head=model_opt.n_head,
+        dropout=model_opt.dropout).to(device)
+        transformer.load_state_dict(checkpoint['model'])
+        print('[Info] Trained model state loaded.')
     optimizer = ScheduledOptim(
         optim.Adam(transformer.parameters(), betas=(0.9, 0.999), eps=1e-09),
         opt.lr, opt.d_model, opt.n_warmup_steps)
+    
 #    optimizer = optim.Adam(transformer.parameters(), betas=(0.9, 0.999), eps=opt.lr)
     train(transformer, training_data, validation_data, optimizer, device, opt)
 
