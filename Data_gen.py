@@ -454,7 +454,7 @@ def Generate_data_bwd(num_node):
         expr_clear = delconstant(expr_list)
         if expr_clear[-1] != '#':
             expr = sp.sympify("".join(expr_clear))
-            print('src',expr)
+#            print('src',expr)
 #        print(expr_clear)
         src_seq = infix_to_prefix(expr_clear)
         diff_p = Process(target = diffexp, args = (expr, diff))
