@@ -141,8 +141,9 @@ def main():
                     is_right = True
                     break
         if is_right == False:
-            print([[opt.reverse_dict[num] for num in data]for data in src_seq.cpu().numpy().tolist()])
-            print([[opt.reverse_dict[num] for num in data]for data in trg_seq.cpu().numpy().tolist()])
+            print('src', [[opt.reverse_dict[num] for num in data]for data in src_seq.cpu().numpy().tolist()])
+            print('pred',[[opt.reverse_dict[num] for num in data]for data in pred_seq])
+            print('trg',[[opt.reverse_dict[num] for num in data]for data in trg_seq.cpu().numpy().tolist()])
         total_n += 1
     print(correct_n/total_n)
 
