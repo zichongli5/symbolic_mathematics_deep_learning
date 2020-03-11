@@ -139,7 +139,7 @@ def main():
                     correct_n += 1
                     is_right = True
                     break
-        if is_right = False:
+        if is_right == False:
             print(src_seq)
             print(pred_seq)
         total_n += 1
