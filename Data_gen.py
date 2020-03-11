@@ -494,20 +494,20 @@ def Generate_data_bwd(num_node):
         InorderTree(tree, res)
         exp_list = res
         exp_str = "".join(exp_list)
-#        exp_str = '324'
+#        exp_str = '5-3/x'
 #        print(exp_str)
         expr = sp.expand(sp.sympify(exp_str))
         expr_str = lambdastr(x,expr)
 #        print('src',expr_str)
         expr_list = string_to_list(expr_str)
-#        print(expr_list)
+#        print('ww',expr_list)
         expr_clear = delconstant2(expr_list)
 #        print(expr_clear)
         if expr_clear[-1] != '#':
             expr = sp.sympify("".join(expr_clear))
 #            print('src',expr)
 #        print(expr_clear)
-        src_seq = infix_to_prefix(expr_clear)
+        src_seq = infix_to_prefix(string_to_list(lambdastr(x,expr)))
         diff_p = Process(target = diffexp, args = (expr, diff))
         if src_seq != 0:
 #            print('start int.....')
