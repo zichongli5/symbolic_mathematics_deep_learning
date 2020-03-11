@@ -92,6 +92,7 @@ def main():
 #    opt.trg_eos_idx = TRG.vocab.stoi[Constants.EOS_WORD]
 
     opt.vocab_dict = {'0':42, '1':1,'2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'-1':10,'-2':11,'-3':12,'-4':13,'-5':14,'-6':15,'-7':16,'-8':17,'-9':18,')': 19, 'tan': 20, 'cos': 21, 'sin': 22, '**': 23, '*': 24, '/': 25, '+': 26, '-': 27, '(': 28, 'exp':29, 'log':30, 'sqrt':31, 'asin':32, 'acos':33, 'atan':34, 'sinh':35, 'cosh':36, 'tanh':37, 'asinh':38, 'acosh':39, 'atanh':40, 'x': 41, 'e': 43, ' ':0, 'pi':44,'s':45, '\s':46}
+    opt.reverse_dict = {0:' ', 1:'1',2:'2',3:'3',4:'4',5:'5',6:'6',7:'7',8:'8',9:'9',10:'-1',11:'-2',12:'-3',13:'-4',14:'-5',15:'-6',16:'-7',17:'-8',18:'-9',19:')',20:'tan',21:'cos',22:'sin',23:'**',24:'*',25:'/',26:'+',27:'-',28:'(',29:'exp',30:'log',31:'sqrt',32:'asin',33:'acos',34:'atan',35:'sinh',36:'cosh',37:'tanh',38:'asinh',39:'acosh',40:'atanh',41:'x',42:'0',43:'e',44:'pi',45:'s',46:'\s'}
 #    test_loader = Dataset(examples=data['test'], fields={'src': SRC, 'trg': TRG})
     
     device = torch.device('cuda' if opt.cuda else 'cpu')
@@ -140,8 +141,8 @@ def main():
                     is_right = True
                     break
         if is_right == False:
-            print(src_seq)
-            print(pred_seq)
+            print([[opt.reverse_dict[num] for num in data]for data in src_seq.cpu().numpy().tolist()])
+            print([[opt.reverse_dict[num] for num in data]for data in trg_seq.cpu().numpy().tolist()])
         total_n += 1
     print(correct_n/total_n)
 
