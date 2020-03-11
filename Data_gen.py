@@ -496,7 +496,7 @@ def Generate_data_bwd(num_node):
         exp_str = "".join(exp_list)
 #        exp_str = '324'
 #        print(exp_str)
-        expr = sp.sympify(exp_str)
+        expr = sp.expand(sp.sympify(exp_str))
         expr_str = lambdastr(x,expr)
 #        print('src',expr_str)
         expr_list = string_to_list(expr_str)
