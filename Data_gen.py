@@ -234,7 +234,7 @@ def delconstant(infix_list):
     
 def delconstant2(infix):
     if infix[-1] in ['#','(']:
-        return ['#']
+        return ['0']
     infix = infix[1:-1]
     def movefwd(list):
         level = 0
@@ -503,14 +503,10 @@ def Generate_data_bwd(num_node):
 #        print('ww',expr_list)
         expr_clear = delconstant2(expr_list)
 #        print(expr_clear)
-        if expr_clear[-1] != '#':
+        if expr_clear != ['0']:
             expr = sp.sympify("".join(expr_clear))
-#            print('src',expr)
-#        print(expr_clear)
-        src_seq = infix_to_prefix(string_to_list(lambdastr(x,expr)))
-        diff_p = Process(target = diffexp, args = (expr, diff))
-        if src_seq != 0:
-#            print('start int.....')
+            src_seq = infix_to_prefix(string_to_list(lambdastr(x,expr)))
+            diff_p = Process(target = diffexp, args = (expr, diff))
             diff_p.start()
 #            integ = integexp(expr)
             while True:
