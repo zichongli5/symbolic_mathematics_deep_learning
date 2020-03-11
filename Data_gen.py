@@ -107,7 +107,7 @@ def string_to_list(str):
             list.append(str[i:i+j])
             i += j
         elif str[i] == '-':
-            if str[i-1] not in ['1','2','3','4','5','6','7','8','9','0']:
+            if str[i-1] != ' ':
                 if str[i+1] in ['1','2','3','4','5','6','7','8','9','0']:
                     j = 1
                     while str[i+1+j] in ['1','2','3','4','5','6','7','8','9','0']:
@@ -116,14 +116,11 @@ def string_to_list(str):
                     list.append(str[i:i+j+1])
                     list.append(')')
                     i += j+1
-                elif str[i+1] == 'x':
+                else:
                     list.append('(')
                     list.append('-1')
                     list.append(')')
                     list.append('*')
-                    i += 1
-                else:
-                    list.append(str[i])
                     i += 1
             else:
                 list.append(str[i])
@@ -494,7 +491,6 @@ def Generate_data_bwd(num_node):
         InorderTree(tree, res)
         exp_list = res
         exp_str = "".join(exp_list)
-#        exp_str = '5-3/x'
 #        print(exp_str)
         expr = sp.expand(sp.sympify(exp_str))
         expr_str = lambdastr(x,expr)
@@ -541,12 +537,12 @@ def Generate_data_bwd(num_node):
             trg.append(str)
     for str in src_seq.split():
         if str[0] in ['1','2','3','4','5','6','7','8','9','0'] and len(str) > 1:
+            src.append('+')
             for i in range(len(str)):
                 src.append(str[i])
         elif str[0:2] in ['-1','-2','-3','-4','-5','-6','-7','-8','-9'] and len(str) > 2:
-            src.append(str[0:2])
-            for i in range(len(str)-2):
-                src.append(str[i+2])
+            for i in range(len(str)):
+                src.append(str[i])
         else:
             src.append(str)
     return [trg, src]
