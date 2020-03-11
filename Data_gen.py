@@ -231,8 +231,58 @@ def delconstant(infix_list):
         return infix[:delete_index]
     else:
         return infix
-
-
+    
+def delconstant2(infix):
+    if infix[-1] in ['#','(']:
+        return ['#']
+    infix = infix[1:-1]
+    def movefwd(list):
+        level = 0
+        have_x = False
+        index = 0
+        for i in range(1,len(list)):
+            if list[-i] == ')':
+                level += 1
+            elif list[-i] == '(':
+                level -= 1
+            elif list[-i] == 'x':
+                have_x = True
+            elif list[-i] in ['+','-']:
+                if level == 0:
+                    index = -i
+                    break
+            else:
+                pass
+        if index == 0:
+            return index, have_x
+        return index+len(list), have_x
+    index_list = []
+    have_x_list = []
+    index = len(infix)
+    index_list.append(index)
+    have_x_list.append(True)
+    del_index=[]
+    while index != 0:
+        print('ss',infix[:index])
+        index, have_x = movefwd(infix[:index])
+        index_list.append(index)
+        have_x_list.append(have_x)
+    if False in have_x_list:
+        for i in range(len(have_x_list)):
+            if have_x_list[i] == False:
+                del_index.append(index_list[i])
+                del_index.append(index_list[i-1])
+    if del_index != []:
+        max_i = max(del_index)
+        min_i = min(del_index)
+        rr= infix[:min_i]+infix[max_i:]
+        if rr == []:
+            return ['0']
+        else:
+            return rr
+    return infix
+    
+    
 def buildTree(prefix):
     prefix = prefix.split()
     pStack = Stack()
@@ -451,7 +501,8 @@ def Generate_data_bwd(num_node):
 #        print('src',expr_str)
         expr_list = string_to_list(expr_str)
 #        print(expr_list)
-        expr_clear = delconstant(expr_list)
+        expr_clear = delconstant2(expr_list)
+        print(expr_clear)
         if expr_clear[-1] != '#':
             expr = sp.sympify("".join(expr_clear))
 #            print('src',expr)
