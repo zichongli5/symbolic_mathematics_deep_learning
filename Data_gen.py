@@ -263,7 +263,7 @@ def delconstant2(infix):
     have_x_list.append(True)
     del_index=[]
     while index != 0:
-        print('ss',infix[:index])
+#        print('ss',infix[:index])
         index, have_x = movefwd(infix[:index])
         index_list.append(index)
         have_x_list.append(have_x)
@@ -502,7 +502,7 @@ def Generate_data_bwd(num_node):
         expr_list = string_to_list(expr_str)
 #        print(expr_list)
         expr_clear = delconstant2(expr_list)
-        print(expr_clear)
+#        print(expr_clear)
         if expr_clear[-1] != '#':
             expr = sp.sympify("".join(expr_clear))
 #            print('src',expr)
