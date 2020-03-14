@@ -203,9 +203,9 @@ def string_to_list_c(str):
         elif str[i] == '#':
             if str[i+2] == 'N':
                 i += 27
-            if str[i+2] == 'D':
+            elif str[i+2] == 'D':
                 i += 13
-            if str[i+2] == 'f':
+            elif str[i+2] == 'f':
                 i += 4
             else:
                 list.append('#')
@@ -453,7 +453,7 @@ def Generate_data_ode(num_node):
     InorderTree(tree, res)
     exp_list = res
     exp_str = "".join(exp_list)
-    expr = sp.sympify(expr_str)
+    expr = sp.sympify(exp_str)
     expr_str = lambdastr(x,expr)
     print('src',expr)
     expr_list = string_to_list_c(expr_str)
@@ -470,7 +470,7 @@ def Generate_data_ode(num_node):
     equation2 = c_solve[0].diff(x)
 #    print(equation2)
     eq_str = lambdastr(x,equation2)
-#    print(eq_str)
+    print('ss',eq_str)
     eq_list = string_to_list_c(eq_str)
     print(eq_list)
     if eq_list in [['('],['0']] or eq_list[-1] == '#':
