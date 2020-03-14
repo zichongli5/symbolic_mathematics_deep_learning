@@ -389,7 +389,7 @@ def Generate_funtion_unary_c(num_node):
                     pos_list.pop(0)
             e = e - pos[0] + 1
         elif pos[1] == 1:
-            op = np.random.choice(['tan', 'cos', 'sin', 'exp', 'log', 'sqrt', 'asin', 'acos'])
+            op = np.random.choice(['tan', 'cos', 'sin', 'exp', 'log', 'sqrt'])
 #            'atan', 'sinh', 'cosh', 'tanh', 'asinh', 'acosh', 'atanh'
 #            op = np.random.choice(['tan', 'cos', 'sin', 'exp', 'log', 'sqrt'])
             currentTree.setRootVal(op)
