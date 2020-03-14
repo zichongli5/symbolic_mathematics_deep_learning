@@ -146,8 +146,7 @@ def string_to_list_c(str):
                 list.append('sin')
                 i += 3
             else:
-#                print('invalid string')
-#                print(str[i])
+                list.append('#')
                 break
         elif str[i] == 'c':
             if i+3 < len(str) and str[i+3] == 'h':
@@ -167,8 +166,7 @@ def string_to_list_c(str):
                 list.append('tan')
                 i += 3
             else:
-#                print('invalid string')
-#                print(str[i])
+                list.append('#')
                 break
         elif str[i] == 'a':
             if str[i:i+5] in ['asinh','acosh','atanh']:
@@ -178,8 +176,7 @@ def string_to_list_c(str):
                 list.append(str[i:i+4])
                 i += 4
             else:
-#                print('invalid string')
-#                print(str[i])
+                list.append('#')
                 break
         elif str[i] == 'm':
             i += 5
@@ -456,23 +453,24 @@ def Generate_data_ode(num_node):
     InorderTree(tree, res)
     exp_list = res
     exp_str = "".join(exp_list)
-    expr = sp.sympify(exp_str)
+    expr = sp.sympify(expr_str)
     expr_str = lambdastr(x,expr)
     print('src',expr)
     expr_list = string_to_list_c(expr_str)
-#    print(expr_str)
+    print(expr_str)
+#    print('ssss',expr_list)
     if expr_list in [['('],['0']] or expr_list[-1] == '#':
         return 0
     f=sp.Function('f')(x)
     equation1 = sp.Eq(expr,f)
-    print(equation1)
+#    print(equation1)
     c_solve = sp.solve(equation1,c)
     if c_solve == []:
         return 0
     equation2 = c_solve[0].diff(x)
-    print(equation2)
+#    print(equation2)
     eq_str = lambdastr(x,equation2)
-    print(eq_str)
+#    print(eq_str)
     eq_list = string_to_list_c(eq_str)
     print(eq_list)
     if eq_list in [['('],['0']] or eq_list[-1] == '#':
