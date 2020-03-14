@@ -210,6 +210,9 @@ def string_to_list_c(str):
                 i += 13
             if str[i+2] == 'f':
                 i += 4
+            else:
+                list.append('#')
+                break
         else:
 #            print('invalid string')
 #            print(str[i])
