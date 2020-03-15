@@ -445,11 +445,29 @@ def diffexp(expr, diff):
     diff.append(tgt_seq)
 
 
-
+def soleq(eq,sol):
+    c_solve = sp.solve(eq,c)
+    print('sssssssssss',c_solve)
+    if c_solve == []:
+        sol.append('#')
+        return 0
+    equation2 = c_solve[0].diff(x)
+    #    print(equation2)
+    eq_str = lambdastr(x,equation2)
+    print('ss',eq_str)
+    eq_list = string_to_list_c(eq_str)
+    print(eq_list)
+    if eq_list in [['('],['0']] or eq_list[-1] == '#':
+        sol.append('#')
+        return 0
+    tg = infix_to_prefix(eq_list)
+    sol.append(tg)
 
 def Generate_data_ode(num_node):
     tree = Generate_funtion_c(num_node)
     res = []
+    manager = Manager()
+    sol = manager.list([' '])
     InorderTree(tree, res)
     exp_list = res
     exp_str = "".join(exp_list)
@@ -464,22 +482,33 @@ def Generate_data_ode(num_node):
     f=sp.Function('f')(x)
     equation1 = sp.Eq(expr,f)
 #    print(equation1)
-    c_solve = sp.solve(equation1,c)
-    if c_solve == []:
-        return 0
-    equation2 = c_solve[0].diff(x)
-#    print(equation2)
-    eq_str = lambdastr(x,equation2)
-    print('ss',eq_str)
-    eq_list = string_to_list_c(eq_str)
-    print(eq_list)
-    if eq_list in [['('],['0']] or eq_list[-1] == '#':
-        return 0
-#    eq_clear = delconstant(eq_list)
+
+    sol_p = Process(target = soleq, args = [equation1, sol])
+    start = time.time()
+    sol_p.start()
+    while True:
+        if sol[-1] == ' ' and (time.time() - start)<5:
+            pass
+        else:
+            os.kill(sol_p.pid,signal.SIGKILL)
+            break
+#    if c_solve == []:
+#        return 0
+#    equation2 = c_solve[0].diff(x)
+##    print(equation2)
+#    eq_str = lambdastr(x,equation2)
+#    print('ss',eq_str)
+#    eq_list = string_to_list_c(eq_str)
+#    print(eq_list)
+#    if eq_list in [['('],['0']] or eq_list[-1] == '#':
+#        return 0
+##    eq_clear = delconstant(eq_list)
     trg = []
     src = []
-    tgt = infix_to_prefix(eq_list)
+    tgt = sol[1]
     print('tgt',tgt)
+    if tgt =='#':
+        return 0
     for str in tgt.split():
         if str[0] in ['1','2','3','4','5','6','7','8','9','0'] and len(str) > 1:
             for i in range(len(str)):
