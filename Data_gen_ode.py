@@ -505,6 +505,8 @@ def Generate_data_ode(num_node):
 ##    eq_clear = delconstant(eq_list)
     trg = []
     src = []
+    if len(sol)==1:
+        return 0
     tgt = sol[1]
     print('tgt',tgt)
     if tgt =='#':
