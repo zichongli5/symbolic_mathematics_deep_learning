@@ -19,8 +19,8 @@ def load_model(opt, device):
     model_opt = checkpoint['settings']
 
     model = Transformer(
-        46,
-        46,
+        49,
+        49,
         trg_emb_prj_weight_sharing=model_opt.proj_share_weight,
         emb_src_trg_weight_sharing=model_opt.embs_share_weight,
         d_k=model_opt.d_k,
