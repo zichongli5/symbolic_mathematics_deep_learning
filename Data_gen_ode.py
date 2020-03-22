@@ -633,6 +633,7 @@ def Generate_data_ode(num_node):
             pass
         else:
             os.kill(sol_p.pid,signal.SIGKILL)
+            print('out of time')
             break
     trg = []
     src = []
