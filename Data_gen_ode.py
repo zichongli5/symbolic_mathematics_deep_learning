@@ -635,7 +635,7 @@ def Generate_data_ode(num_node):
     start = time.time()
     sol_p.start()
     while True:
-        if sol[-1] == ' ' and (time.time() - start)<10:
+        if sol[-1] == ' ' and (time.time() - start)<3:
             pass
         else:
             os.kill(sol_p.pid,signal.SIGKILL)
