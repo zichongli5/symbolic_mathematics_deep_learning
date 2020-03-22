@@ -199,7 +199,7 @@ def string_to_list_c(str):
             i += 19
         elif str[i] == 'f':
             i += 4
-            list.append('y')
+            list.append('f(x)')
         elif str[i] == '#':
             if str[i+2] == 'N':
                 i += 27
@@ -217,33 +217,6 @@ def string_to_list_c(str):
             break
     return list
                 
-def delconstant(infix_list):
-    if infix_list[-1] in ['#','(']:
-        return ['#']
-    infix = infix_list[1:-1]
-    level = 0
-    have_x = 0
-    delete_index = 0
-    for i in range(1,len(infix)+1):
-        if infix[-i] == ')':
-            level += 1
-        elif infix[-i] == '(':
-            level -= 1
-        elif infix[-i] == 'x':
-            have_x = 1
-            break
-        elif infix[-i] in ['+','-']:
-            if level == 0:
-                delete_index = -i
-        else:
-            pass
-    if have_x == 0:
-        infix = ['0']
-        return infix
-    elif delete_index != 0:
-        return infix[:delete_index]
-    else:
-        return infix
 
 
 def buildTree(prefix):
@@ -444,74 +417,231 @@ def diffexp(expr, diff):
     tgt_seq = infix_to_prefix(diff_list)
     diff.append(tgt_seq)
 
+def coefsimplify(infix):
+    if infix[-1] in ['#','(']:
+        return ['0']
+    infix = infix[1:-1]
+    def movefwd(list):
+        level = 0
+        have_x = False
+        have_c = False
+        index = 0
+        for i in range(1,len(list)):
+            if list[-i] == ')':
+                level += 1
+            elif list[-i] == '(':
+                level -= 1
+            elif list[-i] == 'x':
+                have_x = True
+            elif list[-i] == 'c':
+                have_c = True
+            elif list[-i] in ['+','-']:
+                if level == 0:
+                    index = -i
+                    break
+            else:
+                pass
+        if index == 0:
+            return index, have_x, have_c
+        return index+len(list), have_x, have_c
+    index_list = []
+    have_x_list = []
+    have_c_list = []
+    index = len(infix)
+    index_list.append(index)
+    have_x_list.append(False)
+    have_c_list.append(False)
+    del_index=[]
+    while index != 0:
+#        print('ss',infix[:index])
+        index, have_x, have_c = movefwd(infix[:index])
+        index_list.append(index)
+        have_x_list.append(have_x)
+        have_c_list.append(have_c)
+    if sum(have_c_list) != 1:
+        return ['0']
+    index_list[-1] = -1
+    c_expr = infix[index_list[have_c_list.index(True)]+1:index_list[have_c_list.index(True)-1]]
+    def movefwd2(list):
+        level = 0
+        have_x = False
+        have_c = False
+        index = 0
+        for i in range(1,len(list)):
+            if list[-i] == ')':
+                level += 1
+            elif list[-i] == '(':
+                level -= 1
+            elif list[-i] == 'x':
+                have_x = True
+            elif list[-i] == 'c':
+                have_c = True
+            elif list[-i] in ['/','*']:
+                if level == 0:
+                    index = -i
+                    break
+            else:
+                pass
+        if index == 0:
+            return index, have_x, have_c
+        return index+len(list), have_x, have_c
+    index_list_c = []
+    have_x_list_c = []
+    have_c_list_c = []
+    index = len(c_expr)
+    index_list_c.append(index)
+    have_x_list_c.append(False)
+    have_c_list_c.append(False)
+    del_index=[]
+    while index != 0:
+#        print('ss',infix[:index])
+        index, have_x, have_c = movefwd2(c_expr[:index])
+        index_list_c.append(index)
+        have_x_list_c.append(have_x)
+        have_c_list_c.append(have_c)
+    if sum(have_c_list_c) != 1:
+        return ['0']
+#    print(c_expr)
+#    print(have_c_list_c)
+#    print(have_x_list_c)
+#    print(index_list_c)
+    index_list_c[-1] = -1
+    if have_x_list_c[have_c_list_c.index(True)] == False:
+        for i in range(1,len(index_list_c)):
+            if have_x_list_c[i] == False and have_c_list_c[i] == False:
+                c_expr[index_list_c[i]+1:index_list_c[i-1]] = ['1']
+            elif have_x_list_c[i] == False and have_c_list_c[i] == True:
+                c_expr[index_list_c[i]+1:index_list_c[i-1]] = ['c']
+            else:
+                pass
+    print(c_expr)
+    infix[index_list[have_c_list.index(True)]+1:index_list[have_c_list.index(True)-1]] = c_expr
+    return infix
+        
 
-def soleq(eq,sol):
-    c_solve = sp.solve(eq,c)
-    print('sssssssssss',c_solve)
+
+def delconstant(infix):
+    if infix[-1] in ['#','(']:
+        return ['0']
+    infix = infix[1:-1]
+    def movefwd(list):
+        level = 0
+        have_x = False
+        index = 0
+        for i in range(1,len(list)):
+            if list[-i] == ')':
+                level += 1
+            elif list[-i] == '(':
+                level -= 1
+            elif list[-i] == 'x':
+                have_x = True
+            elif list[-i] in ['+','-']:
+                if level == 0:
+                    index = -i
+                    break
+            else:
+                pass
+        if index == 0:
+            return index, have_x
+        return index+len(list), have_x
+    index_list = []
+    have_x_list = []
+    index = len(infix)
+    index_list.append(index)
+    have_x_list.append(True)
+    del_index=[]
+    while index != 0:
+#        print('ss',infix[:index])
+        index, have_x = movefwd(infix[:index])
+        index_list.append(index)
+        have_x_list.append(have_x)
+    if False in have_x_list:
+        for i in range(len(have_x_list)):
+            if have_x_list[i] == False:
+                del_index.append(index_list[i])
+                del_index.append(index_list[i-1])
+    if del_index != []:
+        max_i = max(del_index)
+        min_i = min(del_index)
+        rr= infix[:min_i]+infix[max_i:]
+        if rr == []:
+            return ['0']
+        else:
+            return rr
+    return infix
+    
+def clear(list):
+    
+    return list
+
+def soleq(num_node,sol):
+    tree = Generate_funtion_c(num_node)
+    res = []
+    InorderTree(tree, res)
+    exp_list = res
+    expr = sp.sympify("".join(exp_list))
+    print('src expr',expr)
+    expr_list = string_to_list_c(lambdastr(x,expr))
+    if expr_list in [['('],['0']] or expr_list[-1] == '#':
+        sol.append('#')
+        return 0
+#    expr_list_clear = coefsimplify(expr_list)
+#    print(expr_list_clear)
+#    if expr_list_clear in [['('],['0']] or expr_list_clear[-1] == '#':
+#        sol.append('#')
+#        return 0
+#    expr = sp.sympify("".join(expr_list_clear))
+    f=sp.Function('f')(x)
+    equation1 = sp.Eq(expr,f)
+    c_solve = sp.solve(equation1,c)
+#    print('sssssssssss',c_solve)
     if c_solve == []:
         sol.append('#')
         return 0
-    equation2 = c_solve[0].diff(x)
-    #    print(equation2)
-    eq_str = lambdastr(x,equation2)
-    print('ss',eq_str)
-    eq_list = string_to_list_c(eq_str)
-    print(eq_list)
-    if eq_list in [['('],['0']] or eq_list[-1] == '#':
+    c_solve_clear = delconstant(string_to_list_c(lambdastr(x,c_solve[0])))
+    c_clear = sp.sympify("".join(c_solve_clear))
+    equation2 = sp.Eq(c_clear,c)
+#    print('eq2',equation2)
+    f_solve = sp.solve(equation2,f)
+    if f_solve == []:
+#        print('uhuhuhuuh')
         sol.append('#')
         return 0
-    tg = infix_to_prefix(eq_list)
-    sol.append(tg)
+    src = infix_to_prefix(string_to_list_c(lambdastr(x,f_solve[0])))
+    if src == 0:
+        sol.append('#')
+        return 0
+    equation3 = c_clear.diff(x)
+#    print('eq',equation3)
+#    print('ss',eq_str)
+    trg = infix_to_prefix(string_to_list_c(lambdastr(x,equation3)))
+#    print(eq_list)
+    if trg == 0:
+        sol.append('#')
+        return 0
+    sol.append(trg)
+    sol.append(src)
 
 def Generate_data_ode(num_node):
-    tree = Generate_funtion_c(num_node)
-    res = []
     manager = Manager()
     sol = manager.list([' '])
-    InorderTree(tree, res)
-    exp_list = res
-    exp_str = "".join(exp_list)
-    expr = sp.sympify(exp_str)
-    expr_str = lambdastr(x,expr)
-    print('src',expr)
-    expr_list = string_to_list_c(expr_str)
-    print(expr_str)
-#    print('ssss',expr_list)
-    if expr_list in [['('],['0']] or expr_list[-1] == '#':
-        return 0
-    f=sp.Function('f')(x)
-    equation1 = sp.Eq(expr,f)
-#    print(equation1)
-
-    sol_p = Process(target = soleq, args = [equation1, sol])
+    sol_p = Process(target = soleq, args = [num_node, sol])
     start = time.time()
     sol_p.start()
     while True:
-        if sol[-1] == ' ' and (time.time() - start)<5:
+        if sol[-1] == ' ' and (time.time() - start)<1:
             pass
         else:
             os.kill(sol_p.pid,signal.SIGKILL)
             break
-#    if c_solve == []:
-#        return 0
-#    equation2 = c_solve[0].diff(x)
-##    print(equation2)
-#    eq_str = lambdastr(x,equation2)
-#    print('ss',eq_str)
-#    eq_list = string_to_list_c(eq_str)
-#    print(eq_list)
-#    if eq_list in [['('],['0']] or eq_list[-1] == '#':
-#        return 0
-##    eq_clear = delconstant(eq_list)
     trg = []
     src = []
-    if len(sol)==1:
+    if len(sol)!=3:
         return 0
-    tgt = sol[1]
-    print('tgt',tgt)
-    if tgt =='#':
+#    print('tgt',sol[1])
+    if sol[1] =='#':
         return 0
-    for str in tgt.split():
+    for str in sol[1].split():
         if str[0] in ['1','2','3','4','5','6','7','8','9','0'] and len(str) > 1:
             for i in range(len(str)):
                 trg.append(str[i])
@@ -521,7 +651,7 @@ def Generate_data_ode(num_node):
                 trg.append(str[i+2])
         else:
             trg.append(str)
-    for str in infix_to_prefix(expr_list).split():
+    for str in sol[2].split():
         if str[0] in ['1','2','3','4','5','6','7','8','9','0'] and len(str) > 1:
             for i in range(len(str)):
                 src.append(str[i])
