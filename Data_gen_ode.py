@@ -195,7 +195,7 @@ def string_to_list_c(str):
             i += 2
         elif str[i] == 'D':
             list.append('$')
-            list.append('y')
+            list.append('f(x)')
             i += 19
         elif str[i] == 'f':
             i += 4
@@ -528,12 +528,12 @@ def delconstant(infix):
         level = 0
         have_x = False
         index = 0
-        for i in range(1,len(list)):
+        for i in range(1,len(list)+1):
             if list[-i] == ')':
                 level += 1
             elif list[-i] == '(':
                 level -= 1
-            elif list[-i] == 'x':
+            elif list[-i] in ['x','f(x)']:
                 have_x = True
             elif list[-i] in ['+','-']:
                 if level == 0:
@@ -555,6 +555,7 @@ def delconstant(infix):
         index, have_x = movefwd(infix[:index])
         index_list.append(index)
         have_x_list.append(have_x)
+#    print(have_x_list)
     if False in have_x_list:
         for i in range(len(have_x_list)):
             if have_x_list[i] == False:
@@ -602,6 +603,7 @@ def soleq(num_node,sol):
         return 0
     c_solve_clear = delconstant(string_to_list_c(lambdastr(x,c_solve[0])))
     c_clear = sp.sympify("".join(c_solve_clear))
+#    print(string_to_list_c(lambdastr(x,c_solve[0])))
     equation2 = sp.Eq(c_clear,c)
 #    print('eq2',equation2)
     f_solve = sp.solve(equation2,f)
