@@ -583,6 +583,7 @@ def soleq(num_node,sol):
     print('src expr',expr)
     expr_list = string_to_list_c(lambdastr(x,expr))
     if expr_list in [['('],['0']] or expr_list[-1] == '#':
+        print('1111')
         sol.append('#')
         return 0
 #    expr_list_clear = coefsimplify(expr_list)
@@ -596,6 +597,7 @@ def soleq(num_node,sol):
     c_solve = sp.solve(equation1,c)
 #    print('sssssssssss',c_solve)
     if c_solve == []:
+        print('222222')
         sol.append('#')
         return 0
     c_solve_clear = delconstant(string_to_list_c(lambdastr(x,c_solve[0])))
@@ -604,11 +606,12 @@ def soleq(num_node,sol):
 #    print('eq2',equation2)
     f_solve = sp.solve(equation2,f)
     if f_solve == []:
-#        print('uhuhuhuuh')
+        print('uhuhuhuuh')
         sol.append('#')
         return 0
     src = infix_to_prefix(string_to_list_c(lambdastr(x,f_solve[0])))
     if src == 0:
+        print('4444')
         sol.append('#')
         return 0
     equation3 = c_clear.diff(x)
@@ -617,6 +620,7 @@ def soleq(num_node,sol):
     trg = infix_to_prefix(string_to_list_c(lambdastr(x,equation3)))
 #    print(eq_list)
     if trg == 0:
+        print('55555')
         sol.append('#')
         return 0
     sol.append(trg)
@@ -633,7 +637,6 @@ def Generate_data_ode(num_node):
             pass
         else:
             os.kill(sol_p.pid,signal.SIGKILL)
-            print('out of time')
             break
     trg = []
     src = []
